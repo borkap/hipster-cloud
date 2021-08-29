@@ -144,7 +144,7 @@ export class SwaggerException extends Error {
 }
 
 function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
-    if (result !== null && result !== 'undefined')
+    if (result !== null && result !== undefined)
         throw result;
     else
         throw new SwaggerException(message, status, response, headers, null);
