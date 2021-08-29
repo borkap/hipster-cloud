@@ -17,7 +17,7 @@ export class BooksClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    get(): Promise<Book[]> {
+    getAllBooks(): Promise<Book[]> {
         let url_ = this.baseUrl + "/";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -29,11 +29,11 @@ export class BooksClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGet(_response);
+            return this.processGetAllBooks(_response);
         });
     }
 
-    protected processGet(response: Response): Promise<Book[]> {
+    protected processGetAllBooks(response: Response): Promise<Book[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -61,12 +61,12 @@ export class BooksClient {
 
 export class Book implements IBook {
     id!: number;
-    title?: string | undefined;
-    author?: string | undefined;
+    title!: string;
+    author!: string;
     year!: number;
-    isbn?: string | undefined;
-    description?: string | undefined;
-    coverImageUrl?: string | undefined;
+    isbn!: string;
+    description!: string;
+    coverImageUrl!: string;
 
     constructor(data?: IBook) {
         if (data) {
@@ -111,12 +111,12 @@ export class Book implements IBook {
 
 export interface IBook {
     id: number;
-    title?: string | undefined;
-    author?: string | undefined;
+    title: string;
+    author: string;
     year: number;
-    isbn?: string | undefined;
-    description?: string | undefined;
-    coverImageUrl?: string | undefined;
+    isbn: string;
+    description: string;
+    coverImageUrl: string;
 }
 
 export class SwaggerException extends Error {
@@ -144,7 +144,7 @@ export class SwaggerException extends Error {
 }
 
 function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
-    if (result !== null && result !== undefined)
+    if (result !== null && result !== 'undefined')
         throw result;
     else
         throw new SwaggerException(message, status, response, headers, null);
