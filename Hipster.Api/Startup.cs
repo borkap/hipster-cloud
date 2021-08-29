@@ -1,3 +1,8 @@
+using Microsoft.VisualBasic.CompilerServices;
+using System.Security.AccessControl;
+using System.Reflection;
+using System.Net.Mime;
+using System.Runtime.Serialization;
 using System.Net.Security;
 using System;
 using System.Collections.Generic;
@@ -35,6 +40,8 @@ namespace Hipster.Api
             services.AddDbContext<DatabaseContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("Database"))
             );
+
+            services.AddCors(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +55,13 @@ namespace Hipster.Api
             app.UseRouting();
             app.UseOpenApi();
             app.UseSwaggerUi3();
+
+            app.UseCors(o => 
+            {
+                o.AllowAnyOrigin();
+                o.AllowAnyHeader();
+                o.AllowAnyMethod();                
+            });
 
             app.UseEndpoints(endpoints =>
             {
